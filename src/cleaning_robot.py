@@ -84,8 +84,17 @@ class CleaningRobot:
         pass
 
     def manage_cleaning_system(self) -> None:
-        # To be implemented
-        pass
+        charge = self.ibs.get_charge_left()
+        if charge < 10:
+            GPIO.output(self.RECHARGE_LED_PIN, GPIO.HIGH)
+            GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.LOW)
+            self.recharge_led_on = True
+            self.cleaning_system_on = False
+        if charge > 10:
+            GPIO.output(self.RECHARGE_LED_PIN, GPIO.LOW)
+            GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.HIGH)
+            self.cleaning_system_on = True
+            self.recharge_led_on = False
 
     def activate_wheel_motor(self) -> None:
         """
