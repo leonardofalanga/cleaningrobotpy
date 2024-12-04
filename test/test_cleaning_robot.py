@@ -8,7 +8,7 @@ from src.cleaning_robot import CleaningRobot
 
 class TestCleaningRobot(TestCase):
 
-    def initialize_robot(self):
+    def test_initialize_robot(self):
         system=CleaningRobot()
         system.initialize_robot()
         self.assertEquals(system.robot_status(),"(0,0,N)")
