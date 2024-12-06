@@ -79,6 +79,9 @@ class CleaningRobot:
         if command == self.FORWARD:
             self.activate_wheel_motor()
             self.pos_y += 1
+        if command == self.RIGHT:
+            self.activate_rotation_motor(self.RIGHT)
+            self.heading = self.E
     def obstacle_found(self) -> bool:
         # To be implemented
         pass
