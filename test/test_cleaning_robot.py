@@ -35,5 +35,11 @@ class TestCleaningRobot(TestCase):
         system.execute_command(system.FORWARD)
         self.assertEqual(system.robot_status(), "(0,1,N)")
 
+    def test_execute_command_rotation_r(self):
+        system = CleaningRobot()
+        system.initialize_robot()
+        system.execute_command(system.RIGHT)
+        self.assertEqual(system.robot_status(), "(0,0,E)")
+
 
 
