@@ -79,14 +79,15 @@ class TestCleaningRobot(TestCase):
         system.heading = "N"
         system.manage_cleaning_system()
         self.assertEqual(system.execute_command(system.FORWARD), "!(1,1,N)")
-
+    @patch.object(GPIO, "input")
     @patch.object(IBS, "get_charge_left")
     @patch.object(GPIO, "output")
-    def test_vibration_motor_obstacles(self, mock_output: Mock, mock_ibs: Mock):
+    def test_vibration_motor_obstacles(self, mock_output: Mock, mock_ibs: Mock, mock_input: Mock):
         system = CleaningRobot()
         system.initialize_robot()
         mock_ibs.return_value = 15
+        mock_input.return_value = True
         system.execute_command(system.FORWARD)
-        mock_output.assert_called_once_with(system.VIBRATION, GPIO.HIGH)
+        mock_output.assert_has_calls([call(system.VIBRATION, GPIO.HIGH)])
 
 

@@ -39,6 +39,8 @@ class CleaningRobot:
     RIGHT = 'r'
     FORWARD = 'f'
 
+    VIBRATION = 36
+
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
@@ -84,6 +86,7 @@ class CleaningRobot:
             return "!" + self.robot_status()
         if command == self.FORWARD:
             if self.obstacle_found():
+                GPIO.output(self.VIBRATION, GPIO.HIGH)
                 x= self.pos_x
                 y= self.pos_y
                 if self.heading == self.N:
