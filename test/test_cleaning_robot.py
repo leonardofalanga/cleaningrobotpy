@@ -52,5 +52,11 @@ class TestCleaningRobot(TestCase):
         system.initialize_robot()
         self.assertRaises(CleaningRobotError, system.execute_command, "b")
 
+    @patch.object(GPIO, "input")
+    def  test_obstacle_found(self, mock_input: Mock):
+        system = CleaningRobot()
+        system.initialize_robot()
+        mock_input.return_value = 1
+        self.assertEqual(system.execute_command(system.FORWARD), "(0,0,N)(0,1)")
 
 
