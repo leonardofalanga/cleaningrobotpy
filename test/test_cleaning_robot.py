@@ -29,33 +29,43 @@ class TestCleaningRobot(TestCase):
         system.manage_cleaning_system()
         mock_ledclean.assert_has_calls([call(system.RECHARGE_LED_PIN, GPIO.HIGH), call(system.CLEANING_SYSTEM_PIN, GPIO.LOW)])
 
-    def test_execute_command_forward(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_execute_command_forward(self, mock_ibs: Mock):
         system = CleaningRobot()
         system.initialize_robot()
+        mock_ibs.return_value = 15
         system.execute_command(system.FORWARD)
         self.assertEqual(system.robot_status(), "(0,1,N)")
 
-    def test_execute_command_rotation_r(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_execute_command_rotation_r(self, mock_ibs: Mock):
         system = CleaningRobot()
         system.initialize_robot()
+        mock_ibs.return_value = 15
         system.execute_command(system.RIGHT)
         self.assertEqual(system.robot_status(), "(0,0,E)")
 
-    def test_execute_command_rotation_l(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_execute_command_rotation_l(self, mock_ibs: Mock):
         system = CleaningRobot()
         system.initialize_robot()
+        mock_ibs.return_value = 15
         system.execute_command(system.LEFT)
         self.assertEqual(system.robot_status(), "(0,0,W)")
 
-    def test_execute_command_error(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_execute_command_error(self, mock_ibs: Mock):
         system = CleaningRobot()
         system.initialize_robot()
+        mock_ibs.return_value = 15
         self.assertRaises(CleaningRobotError, system.execute_command, "b")
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(GPIO, "input")
-    def  test_obstacle_found(self, mock_input: Mock):
+    def  test_obstacle_found(self, mock_input: Mock, mock_ibs: Mock):
         system = CleaningRobot()
         system.initialize_robot()
+        mock_ibs.return_value = 15
         mock_input.return_value = 1
         self.assertEqual(system.execute_command(system.FORWARD), "(0,0,N)(0,1)")
 
@@ -68,6 +78,6 @@ class TestCleaningRobot(TestCase):
         system.pos_y = 1
         system.heading = "N"
         system.manage_cleaning_system()
-        self.assertEqual(system.robot_status(), "!(1,1,N)")
+        self.assertEqual(system.execute_command(system.FORWARD), "!(1,1,N)")
 
 
